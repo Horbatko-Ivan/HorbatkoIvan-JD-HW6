@@ -1,5 +1,17 @@
+buildscript {
+    dependencies {
+        classpath 'com.h2database:h2:2.2.220'
+    }
+}
 plugins {
     id 'java'
+    id "org.flywaydb.flyway" version "9.21.1"
+}
+
+
+flyway {
+    url = 'jdbc:h2:C:\\Users\\Ivan\\IdeaProjects\\HorbatkoIvan-JD-HW6\\MyDB'
+    user = ''
 }
 
 group 'org.goit'
@@ -12,6 +24,10 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'com.h2database:h2:2.2.220'
+    implementation 'org.flywaydb:flyway-core:9.21.1'
+    implementation 'org.flywaydb:flyway-maven-plugin:9.21.1'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
 }
 
 test {
