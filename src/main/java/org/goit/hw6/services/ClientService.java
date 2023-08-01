@@ -21,18 +21,15 @@ public class ClientService {
 
         PreparedStatement statement;
         try {
-            statement = conn.prepareStatement("INSERT INTO client (name) VALUES (?)");
+            statement = conn.prepareStatement("INSERT INTO client (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
-            statement.addBatch();
-            statement.executeBatch();
-            statement.close();
+            statement.executeUpdate();
 
-            Statement st = conn.createStatement();
-            ResultSet resultSet = st.executeQuery("SELECT id FROM client WHERE name = '" + name + "'");
-            while (resultSet.next()) {
-                id = resultSet.getInt("id");
+            ResultSet rs = statement.getGeneratedKeys();
+
+            if (rs.next()) {
+                id = rs.getLong(1);
             }
-            st.close();
         } catch (SQLException e) {
             log.log(Level.SEVERE, "Exception on INSERT / SELECT client : ", e);
         }
@@ -96,7 +93,6 @@ public class ClientService {
 
     public List<Client> listAll() throws SQLException {
         List<Client> clientList = new ArrayList<>();
-        //open connection
         Database database = Database.getInstance();
         Connection conn = database.getConnection();
         String sql = "SELECT id, name FROM  client";
